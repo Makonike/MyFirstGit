@@ -29,8 +29,6 @@
 #define STUDENTS_CREATE "student2.txt"        //存放增加后的信息6
 #define STUDENTS_COPY "des.txt"               //存放增加后的信息6
 
-//保存文件-文件名任意
-
 /*    用于功能4(统计)中记录班号和每班得分    */
 typedef struct scoreclac{
         char tempclass[6];  //  记录班号(学号前五位)
@@ -131,10 +129,8 @@ ErrorMenu://登陆系统输入错误处理-返回重新输入
                 break;
             case 3:
                 system("cls");
-
                 DeleteAll(S);
                 exit(0);
-
             default:
                 system("cls");
                 printf("\n\n\n\n\n                 ||***********************************STUDENT USER*************************************||\n");
@@ -171,9 +167,7 @@ ErrorMenu://登陆系统输入错误处理-返回重新输入
 *************************************************/
 StuPtr Entering(StuPtr S){
     char a;//用于重新进入时重复确认是否再次录入
-
     fflush(stdin);
-
     if(S){//链表不为空时才执行如下代码段，这时已经初始化并录入过数据了
 Error_re_entry:
         system("cls");
@@ -221,7 +215,7 @@ Error_re_entry:
     }
 
 
-    StuPtr head=(StuPtr)malloc(sizeof(Stu));//
+    StuPtr head=(StuPtr)malloc(sizeof(Stu));		//为表头分配空间
     if(head){//初始化
         head->next=NULL;
         S=head;
@@ -232,8 +226,7 @@ Error_re_entry:
 
     while(1){//录入
         system("cls");
-        StuPtr temp=(StuPtr)malloc(sizeof(Stu));
-
+        StuPtr temp=(StuPtr)malloc(sizeof(Stu));	//为新节点分配空间
         if(temp){
             printf("\n\n\nNow please enter the member (Enter [@] in ID to end)\n");
             printf("\n||->>                 Please enter your Student ID:");
@@ -280,7 +273,7 @@ Error_re_entry:
                 fflush(stdin);
                 getchar();
                 if(S->next->next==NULL){
-                    Infile(S->next,STUDENTS_FILE,"w");
+                    Infile(S->next,STUDENTS_FILE,"w");                  //如果是第一个就覆盖，其他的就追加
                 }else{
                     Infile(S->next,STUDENTS_FILE,"a+");
                 }
@@ -344,7 +337,7 @@ void Add(StuPtr S){
 
             temp->next=S->next;
             S->next=temp;
-            Infile(temp,STUDENTS_CREATE,"a+");
+            Infile(temp,STUDENTS_CREATE,"a+");	//以追加方式将增加的数据写入student2
             system("cls");
             printf("\n\n\n\n\n||->>                                            Add member successfully!");
 
@@ -366,7 +359,7 @@ void Add(StuPtr S){
 *************************************************/
 void Infile(StuPtr S,const char *p,const char *pp){
     FILE *fp=fopen(p,pp); //  打开文件，p-文件名.txt，pp-打开方式 如"r"
-    StuPtr p1=S;    //  工具指针，每次只能传输一个成员的信息(不包括总分和名次)
+    StuPtr p1=S;    //  工具指针，每次只能传输一个成员的信息
     if(!fp){
         system("cls");
         printf("\n\n\n\n\n||->>                                            Can't open!\n");
@@ -383,7 +376,6 @@ p1->Name,p1->Class,p1->Math,p1->English,p1->Physics,p1->Total_Points,p1->Rank);
             return;
         }
     }
-
 }
 
 /*************************************************
@@ -404,7 +396,6 @@ void ShowAll(StuPtr S){
 
     if(S){
         StuPtr p1;
-//        Sum(S);
         for(p1=S->next;p1;p1=p1->next){
             printf("                         %-11s%-11s%-10s%-8.2lf%-8.2lf%-8.2lf%-9.2lf%-5d\n\n",p1->Stu_ID,
 p1->Name,p1->Class,p1->Math,p1->English,p1->Physics,p1->Total_Points,p1->Rank);
@@ -546,7 +537,7 @@ Error:
 //    printf("4----------按成绩段查询某学生的个人成绩\n");
 //    printf("****************************************\n");
 
-    int option;
+    int option;			//选择变量
 
     scanf("%d",&option);    //  输入选择的序号
     switch (option){
@@ -601,7 +592,7 @@ Error_Scoreoption:
 //    printf("3----------根据物理成绩查询\n");
 //    printf("4----------根据总分查询\n");
 //    printf("****************************************\n");
-            int option2;
+            int option2;	//选择变量
             scanf("%d",&option2);
                 switch (option2){
                     case 1:
@@ -1333,18 +1324,18 @@ void Sort1(StuPtr S){
         return;
     }
 
-    StuPtr temp=(StuPtr)malloc(sizeof(Stu));
-    StuPtr p1,p2,p3;
-    int i=1,j=1;
-    double tempscore=S->next->Total_Points;
+    StuPtr temp=(StuPtr)malloc(sizeof(Stu));//用于互换的中间变量
+    StuPtr p1,p2,p3;						//p1,p2-循环指针 p3-临时指针
+    int i=1,j=1;							//i用于赋予名次,j用来存放上一名的名次
+    double tempscore=S->next->Total_Points;	//tempscore存放上一名的总分
     for(p1=S->next;p1->next;p1=p1->next,i++){
         p3=p1;
-        for(p2=p1->next;p2;p2=p2->next){
+        for(p2=p1->next;p2;p2=p2->next){	//从p1下一个开始比较
             if(p3->Total_Points<p2->Total_Points){
-                p3=p2;
+                p3=p2;						//遍历链表找到最大总分的节点
             }
         }
-        strcpy(temp->Stu_ID,p3->Stu_ID);
+        strcpy(temp->Stu_ID,p3->Stu_ID);	//交换结构体内容
         strcpy(temp->Name,p3->Name);
         strcpy(temp->Class,p3->Class);
         temp->Math=p3->Math;
@@ -1368,14 +1359,14 @@ void Sort1(StuPtr S){
         p1->Physics=temp->Physics;
         p1->Total_Points=temp->Total_Points;
         if(tempscore==p1->Total_Points){
-            p1->Rank=j;
+            p1->Rank=j;					//如果同分就赋予与上一名相同的名次
         }else{
-            p1->Rank=i;
+            p1->Rank=i;					//反之则赋予名次i
         }
-        j=p1->Rank;
-        tempscore=p1->Total_Points;
+        j=p1->Rank;						//记录该学生名次
+        tempscore=p1->Total_Points;		//记录该学生总分
     }
-    if(tempscore==p1->Total_Points){
+    if(tempscore==p1->Total_Points){	//最后一位赋值名次
         p1->Rank=j;
     }else{
         p1->Rank=i;
@@ -1395,17 +1386,17 @@ void Sort1(StuPtr S){
 *************************************************/
 void Sort2(StuPtr S){
 
-    StuPtr temp=(StuPtr)malloc(sizeof(Stu));
-    StuPtr p1,p2,p3;
+    StuPtr temp=(StuPtr)malloc(sizeof(Stu));//用于互换的中间变量
+    StuPtr p1,p2,p3;						//p1,p2-循环指针 p3-临时指针
     for(p1=S->next;p1->next;p1=p1->next){
         p3=p1;
-        for(p2=p1->next;p2;p2=p2->next){
+        for(p2=p1->next;p2;p2=p2->next){	//从p1下一个开始比较
             if(strcmp(p3->Stu_ID,p2->Stu_ID)<0){
-                p3=p2;
+                p3=p2;						//遍历链表找到最大id
             }
 
         }
-        strcpy(temp->Stu_ID,p3->Stu_ID);
+        strcpy(temp->Stu_ID,p3->Stu_ID);	//交换结构体内容
         strcpy(temp->Name,p3->Name);
         strcpy(temp->Class,p3->Class);
         temp->Math=p3->Math;
