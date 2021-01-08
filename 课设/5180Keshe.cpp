@@ -210,6 +210,7 @@ Error_re_entry:
             printf("                 ||                                                                                    ||\n");
             printf("                 ||********************Please [enter] to proceed to the next step**********************||\n");
             fflush(stdin);
+            a=getchar();
             goto Error_re_entry;
         }
     }
